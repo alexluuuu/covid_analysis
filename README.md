@@ -53,7 +53,7 @@ Next, we're going to talk about setting up our Conda environment.
 So the first step is actually to set up github. Because you have a .edu email, you can get a free Github Pro account: https://education.github.com/pack
 
 
-After you've made an account, you can go to this link and following the instructions under "Configuring Git identification" and "Setup Github." 
+After you've made an account, you can go to this link and follow the instructions: https://kbroman.org/github_tutorial/pages/first_time.html
 
 Now that Github is set up, you want to clone (basically, download) this repository. You can do this by doing the following: 
 
