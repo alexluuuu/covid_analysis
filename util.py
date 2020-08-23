@@ -18,10 +18,18 @@ def obtain_strain_list(file="/Users/Alex/Documents/SchneckLab/COVID/sequences.xl
 	return list(strain_df['strain'])
 
 
-def obtain_allele_list(): 
-	predictor = Class1PresentationPredictor.load()
-	# snippet for obtaining supported alleles directly
-	return predictor.supported_alleles
+def obtain_allele_list(preselected=None): 
+
+	if preselected is None:
+		predictor = Class1PresentationPredictor.load()
+		# snippet for obtaining supported alleles directly
+		return predictor.supported_alleles
+
+	else: 
+		with open(preselected, 'r') as f: 
+			all_lines = f.readlines()
+			all_lines = list(map(lambda x: x.rstrip(), all_lines))
+			return all_lines
 
 
 def partition_alleles(all_alleles, num_per_partition=6, truncate_test=False): 
@@ -29,10 +37,11 @@ def partition_alleles(all_alleles, num_per_partition=6, truncate_test=False):
 	partitioned_alleles = []
 	for i in range(len(all_alleles)//num_per_partition):
 		j = i + 6 if i + 6 < len(all_alleles) else None
-		partitioned_alleles.append([all_alleles[i:i+6]])
+		partitioned_alleles.append(all_alleles[i:i+6])
 
 	if truncate_test: 
-		return partitioned_alleles[10]
+		print(partitioned_alleles[:10])
+		return partitioned_alleles[:10]
 
 	return partitioned_alleles
 

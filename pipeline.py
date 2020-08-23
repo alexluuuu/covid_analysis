@@ -14,17 +14,8 @@ from util import *
 
 def main(): 
 
-	# process parameter specifications from command line? 
-
-	# protein_file_name = ""
-
-	# # load in desired sequences
-	# identifiers, sequences = read_from_file(protein_file_name)
-
-	# seq_dict = {identifier:seq for identifier, seq in zip(identifiers, sequences)}
-
 	# select the desired alleles 
-	all_alleles = obtain_allele_list()
+	all_alleles = obtain_allele_list(preselected="/Users/Alex/Documents/SchneckLab/COVID/supported_alleles.txt")
 
 	partitioned_alleles = partition_alleles(all_alleles, truncate_test=True)
 
@@ -34,16 +25,20 @@ def main():
 	strains = list(sequence_df.columns)
 
 	for index, row in sequence_df.iterrows(): 
-		print(row[strains[0]])
-		print('--')
+		print('=='*25)
 		for strain in strains: 
+			print('>' + ' '*25 + strain)
+			print(partitioned_alleles[0])
 			prediction_df = prediction_whole_seq({strain:row[strain]}, partitioned_alleles[0])
 			for allele_set in partitioned_alleles[1:]: 
-				additional = prediction_whole_seq({strain:row[strain]}, partitioned_alleles[0])
-				prediction.append(additional)
+				print(allele_set)
+				additional = prediction_whole_seq({strain + index:row[strain]}, partitioned_alleles[0])
+				prediction_df.append(additional)
+
+			print('--'*25)
 
 
-			prediction_df.to_csv('/Users/Alex/Documents/SchneckLab/COVID/predictions/' + strain.replace('/', '_') + '_test.csv')
+			prediction_df.to_csv('/Users/Alex/Documents/SchneckLab/COVID/predictions/' + strain.replace('/', '_') + '_' + index + '_test.csv')
 
 
 	# call wrapped functions from prediction.py
