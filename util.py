@@ -14,7 +14,7 @@ from mhcflurry import Class1PresentationPredictor
 def obtain_strain_list(file="sequences.xlsx"): 
 
 	cwd = os.getcwd()
-	strain_df = pd.read_excel(os.join(cwd, file))
+	strain_df = pd.read_excel(os.path.join(cwd, file))
 
 	return list(strain_df['strain'])
 
@@ -169,12 +169,12 @@ def main():
 	'''
 	
 	cwd = os.getcwd()
-	fasta_name = os.join(cwd, "allprot0818.fasta")
+	fasta_name = os.path.join(cwd, "allprot0818.fasta")
 	strains = obtain_strain_list()
 	print(strains)
 	sequence_df = process_fasta(fasta_name, strains)
 
-	outfile = os.join(cwd, "prelim_seq.csv")
+	outfile = os.path.join(cwd, "prelim_seq.csv")
 	sequence_df.to_csv(outfile)
 
 

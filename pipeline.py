@@ -16,11 +16,11 @@ def main():
 
 	# select the desired alleles 
 	cwd = os.getcwd()
-	all_alleles = obtain_allele_list(preselected=os.join(cwd, "supported_alleles.txt"))
+	all_alleles = obtain_allele_list(preselected=os.path.join(cwd, "supported_alleles.txt"))
 
 	partitioned_alleles = partition_alleles(all_alleles, truncate_test=True)
 
-	prelim_file = os.join(cwd, "prelim_seq.csv")
+	prelim_file = os.path.join(cwd, "prelim_seq.csv")
 	sequence_df = pd.read_csv(prelim_file, index_col=0)
 
 	strains = list(sequence_df.columns)
@@ -39,7 +39,7 @@ def main():
 			print('--'*25)
 
 
-			prediction_df.to_csv(os.join(cwd, '/predictions/', strain.replace('/', '_')'_' + index + '_test.csv'))
+			prediction_df.to_csv(os.path.join(cwd, '/predictions/', strain.replace('/', '_')'_' + index + '_test.csv'))
 
 
 	# call wrapped functions from prediction.py
