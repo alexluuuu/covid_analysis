@@ -15,11 +15,12 @@ from util import *
 def main(): 
 
 	# select the desired alleles 
-	all_alleles = obtain_allele_list(preselected="/Users/Alex/Documents/SchneckLab/COVID/supported_alleles.txt")
+	cwd = os.getcwd()
+	all_alleles = obtain_allele_list(preselected=cwd + "supported_alleles.txt")
 
 	partitioned_alleles = partition_alleles(all_alleles, truncate_test=True)
 
-	prelim_file = "/Users/Alex/Documents/SchneckLab/COVID/prelim_seq.csv"
+	prelim_file = cwd + "prelim_seq.csv"
 	sequence_df = pd.read_csv(prelim_file, index_col=0)
 
 	strains = list(sequence_df.columns)
@@ -32,13 +33,13 @@ def main():
 			prediction_df = prediction_whole_seq({strain:row[strain]}, partitioned_alleles[0])
 			for allele_set in partitioned_alleles[1:]: 
 				print(allele_set)
-				additional = prediction_whole_seq({strain + index:row[strain]}, partitioned_alleles[0])
+				additional = prediction_whole_seq({strain + index:row[strain]}, allele_set)
 				prediction_df.append(additional)
 
 			print('--'*25)
 
 
-			prediction_df.to_csv('/Users/Alex/Documents/SchneckLab/COVID/predictions/' + strain.replace('/', '_') + '_' + index + '_test.csv')
+			prediction_df.to_csv(cwd + '/predictions/' + strain.replace('/', '_') + '_' + index + '_test.csv')
 
 
 	# call wrapped functions from prediction.py

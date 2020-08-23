@@ -11,9 +11,10 @@ import pandas as pd
 from mhcflurry import Class1PresentationPredictor
 
 
-def obtain_strain_list(file="/Users/Alex/Documents/SchneckLab/COVID/sequences.xlsx"): 
+def obtain_strain_list(file="sequences.xlsx"): 
 
-	strain_df = pd.read_excel(file)
+	cwd = os.getcwd()
+	strain_df = pd.read_excel(cwd + file)
 
 	return list(strain_df['strain'])
 
@@ -36,8 +37,8 @@ def partition_alleles(all_alleles, num_per_partition=6, truncate_test=False):
 
 	partitioned_alleles = []
 	for i in range(len(all_alleles)//num_per_partition):
-		j = i + 6 if i + 6 < len(all_alleles) else None
-		partitioned_alleles.append(all_alleles[i:i+6])
+		j = num_per_partition*(i+1) if i + 6 < len(all_alleles) else None
+		partitioned_alleles.append(all_alleles[i*num_per_partition:j])
 
 	if truncate_test: 
 		print(partitioned_alleles[:10])
@@ -167,15 +168,14 @@ def main():
 
 	'''
 	
-	fasta_name = "/Users/Alex/Documents/SchneckLab/COVID/allprot0818.fasta"
+	cwd = os.getcwd()
+	fasta_name = cwd + "allprot0818.fasta"
 	strains = obtain_strain_list()
 	print(strains)
 	sequence_df = process_fasta(fasta_name, strains)
 
-	outfile = "/Users/Alex/Documents/SchneckLab/COVID/prelim_seq.csv"
+	outfile = cwd + "prelim_seq.csv"
 	sequence_df.to_csv(outfile)
-
-
 
 
 if __name__ == "__main__": 
