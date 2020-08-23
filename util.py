@@ -11,6 +11,67 @@ import pandas as pd
 from mhcflurry import Class1PresentationPredictor
 
 
+def obtain_strain_list(file="/Users/Alex/Documents/SchneckLab/COVID/sequences.xlsx"): 
+
+	strain_df = pd.read_excel(file)
+
+	return list(strain_df['strain'])
+
+
+def obtain_allele_list(): 
+	predictor = Class1PresentationPredictor.load()
+	# snippet for obtaining supported alleles directly
+	return predictor.supported_alleles
+
+
+def partition_alleles(all_alleles, num_per_partition=6, truncate_test=False): 
+
+	partitioned_alleles = []
+	for i in range(len(all_alleles)//num_per_partition):
+		j = i + 6 if i + 6 < len(all_alleles) else None
+		partitioned_alleles.append([all_alleles[i:i+6]])
+
+	if truncate_test: 
+		return partitioned_alleles[10]
+
+	return partitioned_alleles
+
+
+def process_fasta(fasta_name, target_identifiers): 
+
+	sequences = {identifier: {} for identifier in target_identifiers}
+
+	with open(fasta_name, 'rb') as f:
+
+		meta = f.readline().decode("utf-8") 
+		while meta: 
+			sequence_line = f.readline().decode("utf-8").rstrip()
+			for identifier in target_identifiers: 
+				if identifier in meta: 
+					splits = meta.split('|')
+					protein = splits[0][1:] 
+					print(identifier, protein)
+					sequences[identifier][protein] = sequence_line
+
+					break
+
+			meta = f.readline().decode("utf-8") 
+
+	proteins = list(sequences[target_identifiers[0]].keys())
+
+	for identifier in target_identifiers: 
+		if len(list(sequences[identifier].keys())) == 0: 
+			print("protein sequences for %s were not found"%(identifier))
+			del sequences[identifier]
+			target_identifiers.remove(identifier)
+
+	sequence_list = {identifier:[sequences[identifier][protein] for protein in proteins] for identifier in target_identifiers}
+
+	sequence_df = pd.DataFrame(sequence_list, index=proteins)
+
+	return sequence_df
+
+
 def read_from_file(protein_file_name, target_identifiers=None): 
 	"""read_from_file
 	
@@ -67,12 +128,6 @@ def preprocess_fasta(fasta_name, num_partitions=50):
 	return 
 
 
-def obtain_allele_list(): 
-	predictor = Class1PresentationPredictor.load()
-	# snippet for obtaining supported alleles directly
-	return predictor.supported_alleles
-
-
 def main(): 
 	'''
 	TODO FOR NOA: 
@@ -102,6 +157,17 @@ def main():
 	talk with Dr. Schneck
 
 	'''
+	
+	fasta_name = "/Users/Alex/Documents/SchneckLab/COVID/allprot0818.fasta"
+	strains = obtain_strain_list()
+	print(strains)
+	sequence_df = process_fasta(fasta_name, strains)
+
+	outfile = "/Users/Alex/Documents/SchneckLab/COVID/prelim_seq.csv"
+	sequence_df.to_csv(outfile)
+
+
+
 
 if __name__ == "__main__": 
 	main()

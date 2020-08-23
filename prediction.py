@@ -1,6 +1,6 @@
 """prediction.py
 
-Wrapping functions, cals to mhcflurry 2.0
+Wrapping functions, calls to mhcflurry 2.0
 """
 import numpy as np
 import pandas as pd
@@ -23,7 +23,7 @@ def prediction_whole_seq(protein_seqs, alleles, result_format="filtered", compar
 
 	prediction_df = predictor.predict_sequences(
 						sequences=protein_seqs,
-						alleles=allels,
+						alleles=alleles,
 						result=result_format,
 						comparison_quantity=comparison_quantity,
 						filter_value=filter_value,
