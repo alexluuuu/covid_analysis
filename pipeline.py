@@ -14,21 +14,32 @@ from util import *
 
 def main(): 
 
-	# process parameter specifications from command line? 
-
-	protein_file_name = ""
-
-	# load in desired sequences
-	identifiers, sequences = read_from_file(protein_file_name)
-
-	seq_dict = {identifier:seq for identifier, seq in zip(identifiers, sequences)}
-
 	# select the desired alleles 
-	all_alleles = obtain_allele_list()
+	cwd = os.getcwd()
+	all_alleles = obtain_allele_list(preselected=os.path.join(cwd, "supported_alleles.txt"))
 
-	alelles = {}
-	for i, allele in enumerate(all_alleles): 
-		alleles{'allele_' + str(i)} = allele
+	partitioned_alleles = partition_alleles(all_alleles, truncate_test=True)
+
+	prelim_file = os.path.join(cwd, "prelim_seq.csv")
+	sequence_df = pd.read_csv(prelim_file, index_col=0)
+
+	strains = list(sequence_df.columns)
+
+	for index, row in sequence_df.iterrows(): 
+		print('=='*25)
+		for strain in strains: 
+			print('>' + ' '*25 + strain)
+			print(partitioned_alleles[0])
+			prediction_df = prediction_whole_seq({strain:row[strain]}, partitioned_alleles[0])
+			for allele_set in partitioned_alleles[1:]: 
+				print(allele_set)
+				additional = prediction_whole_seq({strain + index:row[strain]}, allele_set)
+				prediction_df.append(additional)
+
+			print('--'*25)
+
+
+			prediction_df.to_csv(os.path.join(cwd, '/predictions/', strain.replace('/', '_')'_' + index + '_test.csv'))
 
 
 	# call wrapped functions from prediction.py

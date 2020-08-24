@@ -12,6 +12,77 @@ import csv
 from mhcflurry import Class1PresentationPredictor
 
 
+def obtain_strain_list(file="sequences.xlsx"): 
+
+	cwd = os.getcwd()
+	strain_df = pd.read_excel(os.path.join(cwd, file))
+
+	return list(strain_df['strain'])
+
+
+def obtain_allele_list(preselected=None): 
+
+	if preselected is None:
+		predictor = Class1PresentationPredictor.load()
+		# snippet for obtaining supported alleles directly
+		return predictor.supported_alleles
+
+	else: 
+		with open(preselected, 'r') as f: 
+			all_lines = f.readlines()
+			all_lines = list(map(lambda x: x.rstrip(), all_lines))
+			return all_lines
+
+
+def partition_alleles(all_alleles, num_per_partition=6, truncate_test=False): 
+
+	partitioned_alleles = []
+	for i in range(len(all_alleles)//num_per_partition):
+		j = num_per_partition*(i+1) if i + 6 < len(all_alleles) else None
+		partitioned_alleles.append(all_alleles[i*num_per_partition:j])
+
+	if truncate_test: 
+		print(partitioned_alleles[:10])
+		return partitioned_alleles[:10]
+
+	return partitioned_alleles
+
+
+def process_fasta(fasta_name, target_identifiers): 
+
+	sequences = {identifier: {} for identifier in target_identifiers}
+
+	with open(fasta_name, 'rb') as f:
+
+		meta = f.readline().decode("utf-8") 
+		while meta: 
+			sequence_line = f.readline().decode("utf-8").rstrip()
+			for identifier in target_identifiers: 
+				if identifier in meta: 
+					splits = meta.split('|')
+					protein = splits[0][1:] 
+					print(identifier, protein)
+					sequences[identifier][protein] = sequence_line
+
+					break
+
+			meta = f.readline().decode("utf-8") 
+
+	proteins = list(sequences[target_identifiers[0]].keys())
+
+	for identifier in target_identifiers: 
+		if len(list(sequences[identifier].keys())) == 0: 
+			print("protein sequences for %s were not found"%(identifier))
+			del sequences[identifier]
+			target_identifiers.remove(identifier)
+
+	sequence_list = {identifier:[sequences[identifier][protein] for protein in proteins] for identifier in target_identifiers}
+
+	sequence_df = pd.DataFrame(sequence_list, index=proteins)
+
+	return sequence_df
+
+
 def read_from_file(protein_file_name, target_identifiers=None): 
 	"""read_from_file
 	
@@ -72,6 +143,7 @@ def preprocess_fasta(fasta_name, num_partitions=50):
 	return 
 
 
+<<<<<<< HEAD
 def write_sequences(filename, identifiers, sequences): 
 
 	return 
@@ -83,6 +155,8 @@ def obtain_allele_list():
 	return predictor.supported_alleles
 
 
+=======
+>>>>>>> 1f2153d4167077f86deccf13dbfbcdd1bc21a18f
 def main(): 
 	'''
 	TODO FOR NOA: 
@@ -112,11 +186,24 @@ def main():
 	talk with Dr. Schneck
 
 	'''
+<<<<<<< HEAD
 	df = pd.read_excel('/Users/noaferziger/Documents/Schneck Lab /SARS-CoV-2 computational project/sequences/GISAID data/sample_sequences.xlsx')
 	df1 = df[['strain']]
 	print(df1)
 	list_of_strains = df['strain'].to_list()
 	print(list_of_strains)
+=======
+	
+	cwd = os.getcwd()
+	fasta_name = os.path.join(cwd, "allprot0818.fasta")
+	strains = obtain_strain_list()
+	print(strains)
+	sequence_df = process_fasta(fasta_name, strains)
+
+	outfile = os.path.join(cwd, "prelim_seq.csv")
+	sequence_df.to_csv(outfile)
+
+>>>>>>> 1f2153d4167077f86deccf13dbfbcdd1bc21a18f
 
 	i = '/Users/noaferziger/covid_analysis/sequences_2020-07-27_16-35.fasta'
 
