@@ -49,6 +49,7 @@ def main():
 	df['sequence'] = df['sequence'].map(lambda x: translate(x, table=11))
 	# sequence.translate(table=11)
 	# print(trans_df)
+	print()
 
 	# df['sequence'] = df['sequence'].map(sequence.translate(table=11))
 
