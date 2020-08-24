@@ -7,6 +7,7 @@ import os
 import sys 
 import numpy as np
 import pandas as pd
+import csv
 
 from mhcflurry import Class1PresentationPredictor
 
@@ -32,14 +33,18 @@ def read_from_file(protein_file_name, target_identifiers=None):
 		all_lines = f.readlines() 
 
 		identifiers = all_lines[::2]
+		identifiers = list(map(lambda x: x[1:].decode('ascii').rstrip(), identifiers))
+		print(identifiers[:10])
 		sequences = all_lines[1::2]
+		print(sequences[0])
+
 
 	# return the data structure 
 
 	if target_identifiers is not None: 
 		target_sequences = []
 		for identifier in target_identifiers: 
-			target_sequences.append(identifiers.index(identifier))
+			target_sequences.append(sequences[identifiers.index(identifier)].decode('ascii').rstrip())
 
 		return target_identifiers, target_sequences
 
@@ -63,6 +68,11 @@ def preprocess_fasta(fasta_name, num_partitions=50):
 	    TYPE: Description
 	
 	"""
+
+	return 
+
+
+def write_sequences(filename, identifiers, sequences): 
 
 	return 
 
@@ -102,8 +112,27 @@ def main():
 	talk with Dr. Schneck
 
 	'''
+	df = pd.read_excel('/Users/noaferziger/Documents/Schneck Lab /SARS-CoV-2 computational project/sequences/GISAID data/sample_sequences.xlsx')
+	df1 = df[['strain']]
+	print(df1)
+	list_of_strains = df['strain'].to_list()
+	print(list_of_strains)
+
+	i = '/Users/noaferziger/covid_analysis/sequences_2020-07-27_16-35.fasta'
+
+	identifiers, sequences = read_from_file(i, list_of_strains)
+	print(sequences)
+
+	list1 = ['hello', 'my', 'name']
+	list2 = ['Noa', 'apple', 'banana']
+
+	write_sequences('test.csv', list1, list2)
+
+
+	with open('test.csv', 'w') as f:
+		writer = csv.writer(f)
+		writer.writerows(zip(identifiers, sequences))
 
 if __name__ == "__main__": 
+	print('hello')
 	main()
-
-
