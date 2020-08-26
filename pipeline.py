@@ -39,7 +39,7 @@ def main():
 			print('--'*25)
 
 
-			prediction_df.to_csv(os.path.join(cwd, 'predictions/', strain.replace('/', '_')'_' + index + '_test.csv'))
+			prediction_df.to_csv(os.path.join(cwd, 'predictions/', strain.replace('/', '_') + '_' + index + '_test.csv'))
 
 
 	# call wrapped functions from prediction.py
