@@ -109,3 +109,11 @@ I feel like you can jump to Chapter 3, but if you want to be really thorough, Ch
 I've also attached a starter code file `starter.py`. I've attached a lot of explanations in that file for how things work. 
 
 
+
+
+Commands for the cluster
+
+```
+sbatch -c 2 -t 4:0:0 -p shared --mail-type=begin --mail-type=end --mail-user=alu27@jhu.edu --job-name=matlab 
+```
+

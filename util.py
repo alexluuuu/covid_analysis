@@ -12,6 +12,25 @@ import csv
 from mhcflurry import Class1PresentationPredictor
 
 
+def produce_fasta(prelim_file): 
+
+	sequence_df = pd.read_csv(prelim_file, index_col=0)
+
+	# rows = [str(idx) for idx in sequence_df.index]
+	for col in sequence_df.columns:
+		print('---' + col)
+		for row in sequence_df.index:
+			outfile = os.path.join(os.getcwd(), 'data/test_' + row + '.fasta')
+			with open(outfile, 'a') as f:
+				f.write('>'+col+'\n')
+				f.write(sequence_df[col][row]+'\n')
+
+		print('--'*25)
+
+	return
+	
+
+
 def obtain_strain_list(file="sequences.xlsx"): 
 
 	cwd = os.getcwd()
@@ -142,8 +161,6 @@ def preprocess_fasta(fasta_name, num_partitions=50):
 
 	return 
 
-
-<<<<<<< HEAD
 def write_sequences(filename, identifiers, sequences): 
 
 	return 
@@ -155,8 +172,6 @@ def obtain_allele_list():
 	return predictor.supported_alleles
 
 
-=======
->>>>>>> 1f2153d4167077f86deccf13dbfbcdd1bc21a18f
 def main(): 
 	'''
 	TODO FOR NOA: 
@@ -186,40 +201,24 @@ def main():
 	talk with Dr. Schneck
 
 	'''
-<<<<<<< HEAD
-	df = pd.read_excel('/Users/noaferziger/Documents/Schneck Lab /SARS-CoV-2 computational project/sequences/GISAID data/sample_sequences.xlsx')
-	df1 = df[['strain']]
-	print(df1)
-	list_of_strains = df['strain'].to_list()
-	print(list_of_strains)
-=======
 	
+	# cwd = os.getcwd()
+	# fasta_name = os.path.join(cwd, "allprot0818.fasta")
+	# strains = obtain_strain_list()
+	# print(strains)
+	# sequence_df = process_fasta(fasta_name, strains)
+
+	# outfile = os.path.join(cwd, "prelim_seq.csv")
+	# sequence_df.to_csv(outfile)
+
+
 	cwd = os.getcwd()
-	fasta_name = os.path.join(cwd, "allprot0818.fasta")
-	strains = obtain_strain_list()
-	print(strains)
-	sequence_df = process_fasta(fasta_name, strains)
+	prelim_file = os.path.join(cwd, "prelim_seq.csv")
 
-	outfile = os.path.join(cwd, "prelim_seq.csv")
-	sequence_df.to_csv(outfile)
-
->>>>>>> 1f2153d4167077f86deccf13dbfbcdd1bc21a18f
-
-	i = '/Users/noaferziger/covid_analysis/sequences_2020-07-27_16-35.fasta'
-
-	identifiers, sequences = read_from_file(i, list_of_strains)
-	print(sequences)
-
-	list1 = ['hello', 'my', 'name']
-	list2 = ['Noa', 'apple', 'banana']
-
-	write_sequences('test.csv', list1, list2)
+	produce_fasta(prelim_file)
 
 
-	with open('test.csv', 'w') as f:
-		writer = csv.writer(f)
-		writer.writerows(zip(identifiers, sequences))
 
 if __name__ == "__main__": 
-	print('hello')
+
 	main()

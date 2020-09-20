@@ -18,6 +18,8 @@ def main():
 	cwd = os.getcwd()
 	all_alleles = obtain_allele_list(preselected=os.path.join(cwd, "supported_alleles.txt"))
 
+	# # to do: how to find the most ocmmon worldwide? 
+
 	partitioned_alleles = partition_alleles(all_alleles, truncate_test=True)
 
 	prelim_file = os.path.join(cwd, "prelim_seq.csv")
