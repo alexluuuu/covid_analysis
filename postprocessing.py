@@ -71,7 +71,7 @@ def extract_top_ref(filenames, mode="SB"):
 					continue
 
 				if comp[0].isdigit() and comp[-1] in accept_bindlevel: 
-					temp = [comp[i] for i in [0, 2, 12]]
+					temp = [comp[i] for i in [0, 2, 3, 12]]
 
 					protein_name = comp[10][:comp[10].index('_')] # lol this is gross
 					hla = comp[1]
@@ -135,7 +135,7 @@ def extract_top(filenames, strain_list, mode="SB"):
 					continue
 
 				if comp[0].isdigit() and comp[-1] in accept_bindlevel: 
-					temp = [comp[i] for i in [0, 2, 12]]
+					temp = [comp[i] for i in [0, 2, 3, 12]]
 
 					strain_name = strain_name_match(comp[10])
 					hla = comp[1]
@@ -145,10 +145,10 @@ def extract_top(filenames, strain_list, mode="SB"):
 							extracted[strain_name][hla].append(temp)
 
 						else: 
-							extracted[strain_name][hla] = temp
+							extracted[strain_name][hla] = [temp]
 
 					else: 
-						extracted[strain_name] = {hla: temp}
+						extracted[strain_name] = {hla: [temp]}
 
 				line = f.readline()
 
