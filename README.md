@@ -117,3 +117,29 @@ Commands for the cluster
 sbatch -c 2 -t 4:0:0 -p shared --mail-type=begin --mail-type=end --mail-user=alu27@jhu.edu --job-name=matlab 
 ```
 
+
+
+	PARAMETER            DEFAULT VALUE        DESCRIPTION
+	[-a filename]        HLA-A0201            HLA allele name
+	[-f filename]                             Input file (by default in FASTA format)
+	[-p]                 0                    Switch on if input is a list of peptides (Peptide format)
+	[-l string]          9                    Peptide length (multiple lengths separated by comma e.g. 8,9,10)
+	[-s]                 0                    Sort output on decreasing affinity
+	[-rth float]         0.500000             Threshold for high binding peptides (%Rank)
+	[-rlt float]         2.000000             Threshold for low binding peptides (%Rank)
+	[-listMHC]           0                    Print list of alleles included in netMHC
+	[-xls]               0                    Save output to xls file
+	[-xlsfile filename]  NetMHC_out.xls       File name for xls output
+	[-t float]           -99.900002           Threshold for output
+	[-thrfmt filename]   $NETMHC/data/threshold/%s.thr Format for threshold filenames
+	[-hlalist filename]  $NETMHC/data/allelelist File with covered HLA names
+	[-rdir filename]     $NETMHC              Home directory for NetMHC
+	[-tdir filename]     $TMPDIR              Temporary directory (Default $$)
+	[-syn filename]      $NETMHC/data/synlists/%s.synlist Format of synlist file
+	[-v]                 0                    Verbose mode
+	[-dirty]             0                    Dirty mode, leave tmp dir+files
+	[-inptype int]       0                    Input type [0] FASTA [1] Peptide
+	[-version filename]  $NETMHC/data/version File with version information
+	[-w]                 0                    w option for webface
+
+
